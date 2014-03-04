@@ -9,7 +9,7 @@ try:
     from IPython.config import Config
     from IPython.nbconvert.exporters import HTMLExporter
 
-    from IPython.nbconvert.filters.highlight import _pygment_highlight
+    from IPython.nbconvert.filters.highlight import _pygments_highlight
     from pygments.formatters import HtmlFormatter
 except Exception as e:
     IPython = False
@@ -23,10 +23,10 @@ settings = {}
 # Strip HTML tags, for summary creation
 
 
-from html.parser import HTMLParser
+from HTMLParser import HTMLParser
 
 
-class MLStripper(HTMLParser):
+class MLStripper(HTMLParser, object):
     def __init__(self):
         super().__init__()
         self.reset()
@@ -103,12 +103,12 @@ def custom_highlighter(source, language='ipython'):
     It modifies both the css and html
     """
     formatter = HtmlFormatter(cssclass='highlight-ipynb')
-    output = _pygment_highlight(source, formatter, language)
+    output = _pygments_highlight(source, formatter, language)
     output = output.replace('<pre>', '<pre class="ipynb">')
     return output
 
 
-class MyHTMLParser(HTMLReader._HTMLParser):
+class MyHTMLParser(HTMLReader._HTMLParser, object):
     """
     Extends Pelican HTMLReader._HTMLParser by including the summary of the content
     based on settings['SUMMARY_MAX_LENGTH'].
@@ -146,7 +146,7 @@ class MyHTMLParser(HTMLReader._HTMLParser):
                 self.summary = self._data_buffer + '...'
 
 
-class iPythonNB(BaseReader):
+class iPythonNB(BaseReader, object):
     enabled = True
     file_extensions = ['ipynb']
 
